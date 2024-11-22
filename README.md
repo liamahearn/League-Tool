@@ -1,50 +1,13 @@
-# React + TypeScript + Vite
+# RiftPal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a work-in-progress website that provides League of Legends players with valuable matchup information based on their own individual playing. 
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+I am using a lot of stuff here- TypeScript, React, Node.js, Tailwind, SQLite, and more- most of which I haven't really touched before or used in a project by myself. This means that this project may feel messy to develop, but I'm committed to learning and making it the best it can be! 
 
-## Expanding the ESLint configuration
+A lot of the current project structure is based around learning the respective technologies, but I'm trying to build up functionality as I go. I'm using ChatGPT to help out with implementing a lot of the big unknowns for me, which is very helpful at explaining the granular details! 
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+By inputting a player's in-game name and tag (number), the Riot API is called, retrieving certain player-specific information. This info is then inserted into a database, and the player's profile picture is displayed. 
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+![LeagueLookupDemo](https://github.com/user-attachments/assets/9c1ceec1-f580-4548-9b86-39c2a138fc4f)
