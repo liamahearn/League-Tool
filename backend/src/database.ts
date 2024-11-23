@@ -38,14 +38,6 @@ export const initializeDatabase = () => {
   console.log('Database tables initialized!');
 };
 
-/*
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-game_name TEXT NOT NULL,
-tag_line TEXT NOT NULL,
-profile_icon_id INTEGER,
-puuid TEXT UNIQUE NOT NULL,
-*/
-
 export const addPlayer = (playerData: {
   game_name: string;
   tag_line: string;
@@ -65,5 +57,43 @@ export const addPlayer = (playerData: {
     playerData.puuid, 
   );
 
-  console.log('Player added or already exists:', playerData.game_name, ' #', playerData.tag_line);
+  console.log('Player added:', playerData.game_name, ' #', playerData.tag_line);
+};
+
+export const playerExists = async (puuid: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT 1 FROM players WHERE puuid = ?
+    `;
+    db.get(query, [puuid], (err, row) => {
+      if (err) {
+        console.error('Error querying database:', err.message);
+        reject(err); // Reject the promise in case of an error
+      } else {
+        resolve(!!row); // Resolve to true if a row is found, false otherwise
+      }
+    });
+  });
+};
+
+export const updatePlayer = async (puuid: string, game_name: string, tag_line: string, profile_icon_id: number): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      UPDATE players
+      SET game_name = ?, profile_icon_id = ?, tag_line = ?, last_updated = CURRENT_TIMESTAMP
+      WHERE puuid = ?
+    `;
+    db.run(query, [game_name, profile_icon_id, tag_line, puuid], function (err) {
+      if (err) {
+        console.error('Error updating player:', err.message);
+        reject(err);
+      } else if (this.changes === 0) {
+        console.log(`No rows were updated, player ${game_name} not found.`);
+        resolve(); // Optional: Handle "no changes" gracefully
+      } else {
+        console.log(`Player ${game_name} updated successfully.`);
+        resolve();
+      }
+    });
+  });
 };

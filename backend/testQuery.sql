@@ -1,3 +1,0 @@
-SELECT *
-FROM matches
-LIMIT 2

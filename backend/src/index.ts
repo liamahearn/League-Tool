@@ -1,5 +1,5 @@
 import express from 'express';
-import { initializeDatabase, addPlayer } from './database';
+import { initializeDatabase, addPlayer, playerExists, updatePlayer } from './database';
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -72,15 +72,22 @@ app.get('/api/summoner', async (req, res) => {
     }
 
     //before we send back, look at players database and populate it if the player does not currently exist
-    
+    const playerInDB = await playerExists(summonerDTO.data.puuid);
+    if(playerInDB){
+      console.log(`Player "${accountInfo.data.gameName}" already exists in database!`)
+      await updatePlayer(summonerDTO.data.puuid, accountInfo.data.gameName, accountInfo.data.tagLine, summonerDTO.data.profileIconId);
+    } else {
+       //adds player info to database
+      addPlayer({
+        game_name: accountInfo.data.gameName,
+        tag_line: accountInfo.data.tagLine,
+        profile_icon_id: summonerDTO.data.profileIconId,
+        puuid: summonerDTO.data.puuid,
+      });
+      console.log(`Added player "${accountInfo.data.gameName}"`)
+    }
 
-    //adds player info to database
-    addPlayer({
-      game_name: accountInfo.data.gameName,
-      tag_line: accountInfo.data.tagLine,
-      profile_icon_id: summonerDTO.data.profileIconId,
-      puuid: summonerDTO.data.puuid,
-    });
+   
 
     // returns both account info and summonerDTO
     res.status(200).json({
